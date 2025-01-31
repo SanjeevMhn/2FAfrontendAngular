@@ -1,0 +1,106 @@
+<div class="auth-container">
+  <div class="wrapper">
+    <div class="form-container">
+      <form class="form" [formGroup]="registerForm" (submit)="registerFormSubmit()">
+        <h2 class="title-text">ABC Company</h2>
+        <p class="secondary-text">Create an account</p>
+        <div class="form-group">
+          <input
+            type="text"
+            name="username"
+            id=""
+            class="form-control"
+            placeholder="Username"
+            formControlName="username"
+          />
+          <label for="username" tabindex="1">Username</label>
+          @if(submitted){
+          <span class="err-text">
+            {{
+              formErrHelper.getErrMsgs(
+                "username",
+                registerForm.controls["username"].errors
+              )
+            }}
+          </span>
+          }
+        </div>
+        <div class="form-group">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            placeholder="email"
+            formControlName="email"
+          />
+          <label for="email" tabindex="1">Email</label>
+          @if(submitted){
+          <span class="err-text">
+            {{
+              formErrHelper.getErrMsgs(
+                "email",
+                registerForm.controls["email"].errors
+              )
+            }}
+          </span>
+          }
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            formControlName="password"
+          />
+          <label for="password" tabindex="1">Password</label>
+          @if(submitted){
+          <span class="err-text">
+            {{
+              formErrHelper.getErrMsgs(
+                "password",
+                registerForm.controls["password"].errors
+              )
+            }}
+          </span>
+          }
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            name="confirm-password"
+            id="confrim-password"
+            class="form-control"
+            placeholder="confirm-password"
+            formControlName="confirmPassword"
+          />
+          <label for="confirm-password" tabindex="1">Confirm Password</label>
+          @if(submitted){
+          <span class="err-text">
+            {{
+              formErrHelper.getErrMsgs(
+                "confirm password",
+                registerForm.controls["confirmPassword"].errors
+              )
+            }}
+            {{
+                formErrHelper.getFormErrMsg(registerForm)
+            }}
+          </span>
+          }
+        </div>
+        <div class="form-actions">
+          <button type="submit">Submit</button>
+        </div>
+        @if(submitted && formError !== null){
+          <span class="err-text center">{{formError}}</span>
+        }
+        <div class="has-account">
+          Already have an account?
+          <a routerLink="/login" class="routerlink">Log in</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

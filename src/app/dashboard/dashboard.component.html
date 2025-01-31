@@ -1,0 +1,9 @@
+<div class="dashboard-container container">
+@if(userDetails$ | async; as userDetails){ 
+    @if(userDetails !== null){
+        <div class="user-wish">
+            <h2 class="title-text">Hello {{ userDetails["user_name"] }}</h2>
+        </div>
+     } 
+}
+</div>

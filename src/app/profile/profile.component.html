@@ -1,0 +1,60 @@
+<div class="profile-container container">
+    @if(userDetails$ | async; as userDetails){
+        @if(userDetails !== null){
+            <form class="form" [formGroup]="userForm">
+                <h2 class="title-text">Update User Details</h2>
+                <div class="form-group">
+                    <input type="text" name="user_name" id="user_name" class="form-control" formControlName="user_name" placeholder="User Name">
+                    <label for="user_name">User Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="user_email" id="user_email" formControlName="user_email" placeholder="User Email">
+                    <label for="user_email">User Email</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Update</button>
+                </div>
+            </form>
+            <div class="two-factor-container">
+                @if(userDetails['user_secret_exists'] == false){
+                    <h2 class="title-text">Enable Two Factor Authentication</h2>
+                    <p class="secondary-text">Enhanced security</p>
+                    <button type="button" class="btn-primary" (click)="toggle2FA()">Enable 2FA</button>
+                }@else {
+                    <div class="qr-container">
+                        <img src="{{userDetails['qrCode']}}" alt="">
+                    </div>
+                    <h2 class="title-text">Scan to get an OTP</h2>
+                    <p class="secondary-text">Use either Google or Microsoft Authenticator App</p>
+                    <button type="button" class="btn-primary delete" (click)="toggle2FA(false)">Disable 2FA</button>
+                }
+            </div>
+
+        }
+    }
+</div>
+
+<dialog class="confirm-password" #passwordConfirmDialog (close)="resetForm()">
+    <form class="form" [formGroup]="verifyPasswordForm" (submit)="submitVerifyPassword()">
+        <h2 class="title-text">Verify Password</h2>
+        <p class="secondary-text">Verify password before enabaling 2FA</p>
+        <div class="form-group">
+            <input type="password" id="password" name="password" id="" placeholder="Password" formControlName="password">
+            <label for="password">Password</label>
+            @if(submittedVerifyPassword){
+                <span class="err-text">{{formErrHelperService.getErrMsgs('password', verifyPasswordForm.controls['password'].errors)}}</span>
+                @if(formError | async; as error){
+                    <span class="err-text">{{error}}</span>
+                }
+            }
+        </div>
+        <div class="form-actions">
+            <button type="submit">Verify</button>
+        </div>
+    </form>
+</dialog>
+@if(submitVerifyPassword$ | async){}
+@if(errorSubmitVerifyPassword$ | async){}
+@if(enable2FA$ | async){}
+@if(disable2FA$ | async){}
+@if(getUserDetails$ | async){}

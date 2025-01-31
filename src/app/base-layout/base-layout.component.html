@@ -1,0 +1,20 @@
+<div class="main-container">
+  <nav class="main-nav">
+    <div class="wrapper">
+      <a class="brand-logo" routerLink="dashboard">ABC Company</a>
+      <ul class="nav-list" role="list">
+        <li class="nav-item"><a routerLink="dashboard" class="nav-link" routerLinkActive="active">Dashboard</a></li>
+        <li class="nav-item"><a routerLink="profile" class="nav-link"  routerLinkActive="active">Profile</a></li>
+        <li class="nav-item"><a routerLink="profile" class="nav-link" (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content-container">
+    <div class="wrapper">
+      <router-outlet />
+    </div>
+  </div>
+  @if(loggedInMessage !== null){
+    <div class="logged-in-message">{{loggedInMessage}}</div>
+  }
+</div>

@@ -1,0 +1,52 @@
+.main-container {
+  background-color: rgb(218, 218, 218);
+  min-height: 100vh;
+  position: relative;
+  .logged-in-message {
+    position: absolute;
+    top: 1rem;
+    padding: 1rem;
+    font-size: 1.7rem;
+    color: #fff;
+    border: 1px solid rgb(13, 68, 2);
+    background-color: rgba(66, 162, 40, 0.468);
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 1.2rem;
+  }
+  .main-nav {
+    background-color: #121212;
+    padding: 0.5rem 0;
+    > * {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .brand-logo {
+        font-size: 2.2rem;
+        font-weight: 500;
+        color: #fff;
+        text-decoration: none;
+      }
+      .nav-list {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        .nav-item {
+          .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.2rem;
+            font-size: 1.8rem;
+            color: #fff;
+            text-decoration: none;
+            &.active {
+              color: goldenrod;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+}

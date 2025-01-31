@@ -1,0 +1,117 @@
+.auth-container {
+  background-color: rgb(218, 218, 218);
+  > * {
+    height: 100vh;
+  }
+}
+.form {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 45rem;
+  width: 90%;
+  border-radius: 1rem;
+  background-color: #fff;
+  border: 1px solid rgb(155, 155, 155);
+  //   background-color: #fff;
+  .title-text {
+    text-align: center;
+  }
+  .secondary-text {
+    text-align: center;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    label {
+      position: absolute;
+      top: 0.8rem;
+      left: 1.1rem;
+      font-size: 1.6rem;
+      color: rgba(113, 113, 113, 0.8);
+      transition: top 200ms ease-in;
+      padding: 0;
+      background-color: unset;
+      cursor: text;
+      &:focus {
+        font-size: 1.4rem;
+        top: -1.2rem;
+        color: #000;
+        padding: 0.2rem 0.4rem;
+        background-color: #fff;
+      }
+    }
+    input {
+      padding: 0.8rem 1rem;
+      border-radius: 0.5rem;
+      width: 100%;
+      border-color: rgb(155, 155, 155);
+      outline: unset;
+      &::placeholder {
+        color: transparent;
+      }
+      &:focus,
+      &:not(:placeholder-shown) {
+        & + label {
+          font-size: 1.4rem;
+          top: -1.2rem;
+          color: #000;
+          padding: 0.2rem 0.4rem;
+          background-color: #fff;
+        }
+      }
+    }
+    .forgot-password {
+      text-align: right;
+      cursor: pointer;
+    }
+  }
+
+  .form-actions {
+    padding-top: 1.2rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    button {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      color: #fff;
+      background-color: #181818;
+      font-size: 1.8rem;
+      text-align: center;
+      cursor: pointer;
+      border-width: 0;
+    }
+  }
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.err-text,
+.success-text {
+  &::first-letter {
+    text-transform: capitalize;
+  }
+  &.center{
+    text-align: center;
+  }
+}
+
+.err-text{
+  color: rgba(195, 3, 3, 0.731);
+}
+
+.success-text{
+  color: rgb(23, 141, 5);
+}

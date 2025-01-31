@@ -1,0 +1,32 @@
+.main-nav{
+  background-color: rgb(124, 80, 211);
+  padding: 1rem 0;
+  color: #fff;
+}
+.main-nav > *{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .brand-logo{
+    font-size: 2.2rem;
+    font-weight: 500;
+  }
+  .menu-list{
+    .menu-item{
+      .menu-link{
+        display: flex;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: #fff;
+        &.active-menu-link{
+          color: #ffc637;
+          font-weight: 500;
+        }  
+      }
+     
+    }
+  }
+}
+

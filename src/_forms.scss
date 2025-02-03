@@ -96,6 +96,9 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  > *{
+    display: contents;
+  }
 }
 
 .err-text,

@@ -10,13 +10,14 @@ export class AuthService {
   constructor() {}
   http = inject(HttpClient);
   router = inject(Router);
+  static twoFACredentials: { [key: string]: string } = {};
 
   setAccessToken(token: string) {
     localStorage.setItem('ACCESS_TOKEN', JSON.stringify(token));
   }
 
   getAccessToken(): string | null {
-    let accessToken = localStorage.getItem('ACCESS_TOKEN')
+    let accessToken = localStorage.getItem('ACCESS_TOKEN');
     return accessToken !== null ? JSON.parse(accessToken) : null;
   }
 
@@ -24,15 +25,15 @@ export class AuthService {
     return localStorage.getItem('ACCESS_TOKEN') !== null;
   }
 
-  getUserDetails():Observable<any>{
-    const url = 'http://localhost:8000/auth/me'
-    return this.http.get(url)
+  getUserDetails(): Observable<any> {
+    const url = 'http://localhost:8000/auth/me';
+    return this.http.get(url);
   }
 
   logout() {
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('userDetails');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   login(formData: any): Observable<any> {
@@ -40,23 +41,32 @@ export class AuthService {
     return this.http.post(url, formData);
   }
 
-  register(formData: any): Observable<any>{
+  register(formData: any): Observable<any> {
     const url = 'http://localhost:8000/auth/register';
     return this.http.post(url, formData);
   }
 
-  verifyPassword(formData: any): Observable<any>{
+  verifyPassword(formData: any): Observable<any> {
     const url = 'http://localhost:8000/auth/verify-password';
-    return this.http.post(url, formData)
+    return this.http.post(url, formData);
   }
 
-  enable2FA(): Observable<any>{
-    const url = 'http://localhost:8000/auth/enable-2fa'
-    return this.http.post(url, {}) 
+  enable2FA(): Observable<any> {
+    const url = 'http://localhost:8000/auth/enable-2fa';
+    return this.http.post(url, {});
   }
 
-  disable2FA(): Observable<any>{
-    const url = 'http://localhost:8000/auth/disable-2fa'
-    return this.http.post(url,{})
+  disable2FA(): Observable<any> {
+    const url = 'http://localhost:8000/auth/disable-2fa';
+    return this.http.post(url, {});
+  }
+
+  verifyOTP(formData: {
+    user_name: string;
+    user_password: string;
+    token: string | number;
+  }): Observable<any> {
+    const url = 'http://localhost:8000/auth/verify-otp';
+    return this.http.post(url, formData);
   }
 }

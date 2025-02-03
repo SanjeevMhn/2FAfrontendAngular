@@ -51,14 +51,24 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
+    AuthService.twoFACredentials = {
+      user_email: this.loginForm.controls['email'].value,
+      user_password: this.loginForm.controls['password'].value,
+    };
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         this.formError = null;
         if (res.success) {
-          this.authService.setAccessToken(res.accessToken);
-          this.router.navigate(['/home'], {
-            queryParams: { message: res.message },
-          });
+          if (!res.hasOwnProperty('otp_required')) {
+            this.authService.setAccessToken(res.accessToken);
+            this.router.navigate(['/home'], {
+              queryParams: { message: res.message },
+            });
+          }
+
+          if (res.hasOwnProperty('otp_required')) {
+            this.router.navigate(['/auth/verify-otp']);
+          }
         }
       },
       error: (err: any) => {

@@ -1,64 +1,55 @@
-<div class="auth-container">
-  <div class="wrapper">
-    <div class="form-container">
-      <form class="form" [formGroup]="loginForm" (submit)="loginTwoFA()">
-        @if(redirectMessage !== null){
-        <span class="success-text center">{{ redirectMessage }}</span>
-        }
-        <h2 class="title-text">ABC Company</h2>
-        <p class="secondary-text">Sign in with email</p>
-        <div class="form-group">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            class="form-control"
-            placeholder="Email"
-            formControlName="email"
-          />
-          <label for="email" tabindex="1">Email</label>
-          @if(submitted){
-          <span class="err-text">{{
-            formErrHelper.getErrMsgs(
-              "email",
-              loginForm.controls["email"].errors
-            )
-          }}</span>
-          }
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            class="form-control"
-            placeholder="Password"
-            formControlName="password"
-          />
-          <label for="password" tabindex="1">Password</label>
-          @if(submitted){
-          <span class="err-text">{{
-            formErrHelper.getErrMsgs(
-              "password",
-              loginForm.controls["password"].errors
-            )
-          }}</span>
-          }
-          <a class="forgot-password routerlink">Forgot password?</a>
-          @if(submitted && formError !== null){
-          <div class="err-text center">
-            {{ formError }}
-          </div>
-          }
-        </div>
-        <div class="form-actions">
-          <button type="submit">Submit</button>
-        </div>
-        <div class="register-user">
-          Don't have an account?
-          <a routerLink="/register" class="routerlink">Register here</a>
-        </div>
-      </form>
-    </div>
+<form class="form" [formGroup]="loginForm" (submit)="loginTwoFA()">
+  @if(redirectMessage !== null){
+  <span class="success-text center">{{ redirectMessage }}</span>
+  }
+  <h2 class="title-text">ABC Company</h2>
+  <p class="secondary-text">Sign in with email</p>
+  <div class="form-group">
+    <input
+      type="email"
+      name="email"
+      id="email"
+      class="form-control"
+      placeholder="Email"
+      formControlName="email"
+    />
+    <label for="email">Email</label>
+    @if(submitted){
+    <span class="err-text">{{
+      formErrHelper.getErrMsgs("email", loginForm.controls["email"].errors)
+    }}</span>
+    }
   </div>
-</div>
+  <div class="form-group">
+    <input
+      type="password"
+      name="password"
+      id="password"
+      class="form-control"
+      placeholder="Password"
+      formControlName="password"
+    />
+    <label for="password">Password</label>
+    @if(submitted){
+    <span class="err-text">{{
+      formErrHelper.getErrMsgs(
+        "password",
+        loginForm.controls["password"].errors
+      )
+    }}</span>
+    }
+    <a class="forgot-password routerlink">Forgot password?</a>
+    @if(submitted && formError !== null){
+    <div class="err-text center">
+      {{ formError }}
+    </div>
+    }
+  </div>
+  <div class="form-actions">
+    <button type="submit">Submit</button>
+  </div>
+  <div class="register-user">
+    Don't have an account?
+    <a routerLink="/auth/register" class="routerlink">Register here</a>
+  </div>
+</form>

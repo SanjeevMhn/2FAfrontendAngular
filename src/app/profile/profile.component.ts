@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import {
@@ -8,7 +14,17 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { catchError, ignoreElements, map, Subject, switchMap, tap, throwError } from 'rxjs';
+import {
+  catchError,
+  ignoreElements,
+  map,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  throwError,
+} from 'rxjs';
 import { FormErrHelperService } from '../../services/form-err-helper.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -18,12 +34,13 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnDestroy {
   authService = inject(AuthService);
   userDetails$ = this.authService.getUserDetails().pipe(
     tap((res) => {
       if (res.userDetails !== null) {
         this.userForm.patchValue(res.userDetails);
+        this.userDetails = res.userDetails
       }
     }),
     map((res: any) => res.userDetails)
@@ -45,7 +62,9 @@ export class ProfileComponent {
 
   submittedVerifyPassword = false;
   formErrHelperService = inject(FormErrHelperService);
-  twoFAToggle:boolean | null = null;
+  twoFAToggle: boolean | null = null;
+
+  destroy$ = new Subject<void>();
 
   toggle2FA(enable = true) {
     this.twoFAToggle = enable;
@@ -54,85 +73,89 @@ export class ProfileComponent {
     }
   }
 
-  submiVerifyPasswordSubject = new Subject<void>();
-  formError = new Subject<string>()
-  submitVerifyPassword$ = this.submiVerifyPasswordSubject.pipe(
-    switchMap((_) => {
-      return this.authService
-        .verifyPassword(this.verifyPasswordForm.value)
-        .pipe(
-          tap((res: any) => {
-            if (res.success) {
-              this.passwordConfirm.nativeElement.close();
-              this.verifyPasswordForm.reset();
-              if(this.twoFAToggle !== null){
-                if(this.twoFAToggle){
-                  this.enable2FASubject.next();
-                }
-                if(!this.twoFAToggle){
-                  this.disable2FASubject.next();
-                }
-              }
-            }
-          })
-        );
-    })
-  );
+  submiVerifyPasswordSubject = new Subject<boolean>();
+  formError = new Subject<string>();
 
-  errorSubmitVerifyPassword$ = this.submitVerifyPassword$.pipe(
-    ignoreElements(),
-    catchError((err: HttpErrorResponse) => {
-      this.formError.next(err.error.message)
-      return throwError(() => err)
-    })
-  )
-
-  disable2FASubject = new Subject<void>()
+  disable2FASubject = new Subject<void>();
   disable2FA$ = this.disable2FASubject.pipe(
-    switchMap(_ => {
+    take(1),
+    switchMap((_) => {
       return this.authService.disable2FA().pipe(
         tap((res: any) => {
-          if(res.success){
-            this.getUserDetailsSubject.next()
-          }
-        })
-      )
-    })
-  )
-
-  enable2FASubject = new Subject<void>();
-  enable2FA$ = this.enable2FASubject.pipe(
-    switchMap((_) => {
-      return this.authService.enable2FA().pipe(
-        tap((res: any) => {
           if (res.success) {
-            this.getUserDetailsSubject.next();
+            this.getUserDetails();
           }
         })
       );
     })
   );
 
-  getUserDetailsSubject = new Subject<void>();
-  getUserDetails$ = this.getUserDetailsSubject.pipe(
+  enable2FASubject = new Subject<void>();
+  enable2FA$ = this.enable2FASubject.pipe(
+    take(1),
     switchMap((_) => {
-      return (this.userDetails$ = this.authService
-        .getUserDetails()
-        .pipe(map((res: any) => res.userDetails)));
+      return this.authService.enable2FA().pipe(
+        tap((res: any) => {
+          if (res.success) {
+            this.getUserDetails();
+          }
+        })
+      );
     })
   );
 
+  userDetails: {[key: string]: string | number | boolean } = {}
+
+  getUserDetails(){
+    this.authService.getUserDetails().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (res: any) => {
+        this.userDetails = res.userDetails
+      },
+      error: (err) => {
+        console.error(err)
+      }
+    })
+  }
 
   submitVerifyPassword() {
     this.submittedVerifyPassword = true;
-    if(this.verifyPasswordForm.invalid){
-      return
+    if (this.verifyPasswordForm.invalid) {
+      return;
     }
-    this.submiVerifyPasswordSubject.next();
+
+    this.authService
+      .verifyPassword(this.verifyPasswordForm.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.passwordConfirm.nativeElement.close();
+            this.resetForm();
+            if (this.twoFAToggle !== null) {
+              if (this.twoFAToggle) {
+                this.enable2FASubject.next();
+              }
+              if (!this.twoFAToggle) {
+                this.disable2FASubject.next();
+              }
+            }
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          this.formError.next(err.error.message);
+        },
+      });
   }
 
   resetForm() {
     this.submittedVerifyPassword = false;
     this.verifyPasswordForm.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

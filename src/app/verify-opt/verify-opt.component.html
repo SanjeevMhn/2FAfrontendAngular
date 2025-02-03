@@ -1,0 +1,31 @@
+<form class="form" [formGroup]="verifyOPTForm" (submit)="submitOTPForm()">
+  <h2 class="title-text">ABC Company</h2>
+  <p class="secondary-text">Verify OTP</p>
+  <div class="form-group">
+    <input
+      type="text"
+      name="otp"
+      id="otp"
+      class="form-control"
+      placeholder="Enter OTP"
+      formControlName="token"
+    />
+    <label for="otp">Enter OTP</label>
+    @if(submitted){
+    <span class="err-text">
+      {{
+        formErrHelper.getErrMsgs("OTP", verifyOPTForm.controls["token"].errors)
+      }}
+    </span>
+
+    } @if(otpFormError | async; as formError){
+    <span class="err-text">
+      {{ formError }}
+    </span>
+    }
+  </div>
+  <div class="form-actions">
+    <button type="submit">Verify</button>
+  </div>
+  <div class="center">Back to <a routerLink="/auth/login">Login?</a></div>
+</form>

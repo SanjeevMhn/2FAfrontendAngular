@@ -6,11 +6,28 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { authGuard } from './auth.guard';
 import { loginRedirectGuard } from './login-redirect.guard';
+import { VerifyOptComponent } from './verify-opt/verify-opt.component';
+import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate:[loginRedirectGuard] },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'register', component: RegisterComponent, canActivate:[loginRedirectGuard] },
+  {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: 'register', component: RegisterComponent },
+      { path: 'verify-otp', component: VerifyOptComponent },
+    ],
+    canActivate: [loginRedirectGuard],
+  },
+
+  {
+    path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full',
+  },
+
   {
     path: 'home',
     component: BaseLayoutComponent,
@@ -19,6 +36,6 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
 ];

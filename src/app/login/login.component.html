@@ -12,6 +12,9 @@
       class="form-control"
       placeholder="Email"
       formControlName="email"
+      tabindex="0"
+      autofocus
+      #email
     />
     <label for="email">Email</label>
     @if(submitted){
@@ -28,6 +31,7 @@
       class="form-control"
       placeholder="Password"
       formControlName="password"
+      #password
     />
     <label for="password">Password</label>
     @if(submitted){

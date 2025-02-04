@@ -14,7 +14,7 @@
   color: #000;
 }
 
-.btn-primary {
+.btn-primary{
   background-color: #121212;
   color: #fff;
   font-size: 1.8rem;
@@ -28,10 +28,16 @@
   margin-top: 1.5rem;
   outline: unset;
   border-width: 0;
+  border: 1px solid #121212!important;
   &.delete{
     --color: #880707;
     background-color: var(--color);
-    border-color: var(--color); 
+    border-color: var(--color)!important; 
+  }
+  &.outline{
+    background-color: #fff!important;
+    border: 1px solid #121212!important;
+    color: #121212!important;
   }
 }
 

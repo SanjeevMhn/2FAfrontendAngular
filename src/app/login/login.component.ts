@@ -1,7 +1,7 @@
 type FormErrors = any;
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -20,7 +20,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   loginForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -28,6 +28,13 @@ export class LoginComponent implements OnInit {
       Validators.minLength(6),
     ]),
   });
+  @ViewChild('email', {static: false}) email!: ElementRef<HTMLInputElement>
+
+  ngAfterViewInit(): void {
+    if(this.email){
+      this.email.nativeElement.focus()
+    }
+  }
 
   submitted = false;
   http = inject(HttpClient);

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -28,10 +28,18 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './verify-opt.component.html',
   styleUrl: './verify-opt.component.scss',
 })
-export class VerifyOptComponent implements OnDestroy {
+export class VerifyOptComponent implements OnDestroy, AfterViewInit {
   verifyOPTForm: FormGroup = new FormGroup({
     token: new FormControl('', [Validators.required, Validators.minLength(4)]),
   });
+
+  @ViewChild('token',{static: false}) token !: ElementRef<HTMLInputElement>
+
+  ngAfterViewInit(): void {
+    if(this.token){
+      this.token.nativeElement.focus()
+    }
+  }
 
   submitted = false;
   formErrHelper = inject(FormErrHelperService);

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -27,7 +27,20 @@ export class BaseLayoutComponent implements OnInit {
     }
   }
 
+  @ViewChild('confirmLogout', {static: false}) confirmLogout !: ElementRef<HTMLDialogElement>
+
   logout(){
-    this.authService.logout();
+    if(this.confirmLogout){
+      this.confirmLogout.nativeElement.showModal()
+    }
+  }
+
+  onConfirmLogout(confirm:boolean){
+
+    if(confirm){
+      this.authService.logout()
+    }
+
+    this.confirmLogout.nativeElement.close()
   }
 }
